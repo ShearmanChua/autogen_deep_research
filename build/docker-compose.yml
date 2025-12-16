@@ -1,0 +1,54 @@
+version: '3.5'
+
+networks:
+  agent:
+
+services:
+  agent:
+    image: research-agent:${AGENT_VERSION}
+    build:
+      context: ../agents
+      dockerfile: build/Dockerfile
+    env_file:
+      - .env
+    networks:
+      - agent
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../agents/src:/src
+      - ../data:/data
+      - ../notebooks:/notebooks
+    ports:
+      - 8889:8888
+      - 5001:5000
+  eval-backend:
+    image: research-eval-backend:${EVAL_BE_VERSION}
+    build:
+      context: ../agents
+      dockerfile: build/Dockerfile
+    env_file:
+      - .env
+    networks:
+      - agent
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../agents/src/template_environment/eval:/src
+    ports:
+      - 8000:8000
+  eval-frontend:
+    image: research-eval-frontend:${EVAL_FE_VERSION}
+    build:
+      context: ../agents/src/template_environment/eval/eval_frontend
+      dockerfile: Dockerfile.eval
+    env_file:
+      - .env
+    networks:
+      - agent
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../agents/src/template_environment/eval/eval_frontend:/app
+    ports:
+      - 5173:5173

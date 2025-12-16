@@ -1,0 +1,17 @@
+version: '3.5'
+
+networks:
+  agent:
+
+services:
+  phoenix:
+    image: arizephoenix/phoenix:${PHOENIX_VERSION}
+    environment:
+      - PHOENIX_WORKING_DIR=/app/db
+    networks:
+      - agent
+    volumes:
+      - ../phoenix:/app/db
+    ports:
+      - "6006:6006"  # UI and OTLP HTTP collector
+      - "4317:4317"  # OTLP gRPC collector

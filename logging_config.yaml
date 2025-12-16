@@ -1,0 +1,33 @@
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  simple:
+    format: "%(asctime)s:%(levelname)s:%(filename)s:%(lineno)s -- %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    encoding: utf8
+    formatter: simple
+    filename: log/agents.log
+    mode: w
+    maxBytes: 1048576 # 1024 * 1024 # 1MB
+    backupCount: 5
+
+loggers:
+  agents:
+    level: INFO
+    # console, file
+    handlers: [console, file]
+    propagate: no
+
+root:
+  level: WARN
+  handlers: [console]

@@ -1,0 +1,6 @@
+pre-commit
+ruff
+black
+pylint
+flake8
+isort
